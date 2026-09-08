@@ -18,8 +18,8 @@ permalink: /account-returned/
   </button>
 </p>
 
-<p id="fallback-hint" style="font-size: 14px; color: var(--text-muted); display: none; margin-top: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
-  Si l'app ne s'ouvre pas, ferme cette fenêtre (bouton × en haut) et relance Raw Adventure depuis ton écran d'accueil. Les changements sont déjà appliqués.
+<p id="fallback-hint" style="font-size: 17px; font-weight: 600; color: var(--brand-deep); display: none; margin-top: 20px; max-width: 480px; margin-left: auto; margin-right: auto; padding: 16px; border: 2px solid var(--brand-deep); border-radius: 12px;">
+  Touche la croix × en haut de cette fenêtre pour revenir dans Raw Adventure. Les changements sont déjà appliqués.
 </p>
 
 <p id="desktop-hint" style="font-size: 14px; color: var(--text-muted); display: none; margin-top: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
@@ -49,9 +49,13 @@ permalink: /account-returned/
         return;
       }
 
+      // Fenêtre ouverte par l'app (window.open) : fermeture autorisée.
+      // Dans la visionneuse iOS in-app, close() est ignoré → consigne ×.
+      window.close();
+
       var timer = setTimeout(function() {
         if (hintMobile) hintMobile.style.display = 'block';
-      }, 1500);
+      }, 500);
 
       var onHide = function() {
         if (document.hidden) {
