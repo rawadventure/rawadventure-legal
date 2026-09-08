@@ -69,22 +69,11 @@ permalink: /checkout-success/
 
       // Mobile → tente deep link puis fallback hint après 1.5s.
       // Fenêtre ouverte par l'app (window.open) : fermeture autorisée.
-      // Dans la visionneuse iOS in-app, close() est ignoré → consigne ×.
+      // Dans la visionneuse iOS in-app, close() est ignoré → consigne geste.
       window.close();
-
-      var timer = setTimeout(function() {
-        if (hintMobile) hintMobile.style.display = 'block';
-      }, 500);
-
-      var onHide = function() {
-        if (document.hidden) {
-          clearTimeout(timer);
-          document.removeEventListener('visibilitychange', onHide);
-        }
-      };
-      document.addEventListener('visibilitychange', onHide);
-
-      window.location.href = 'rawadventure://subscription-success';
+      if (hintMobile) hintMobile.style.display = 'block';
+      // NB app native (V2+) : réintroduire ici le deep link
+      // rawadventure:// avec timer de repli.
     });
   })();
 </script>

@@ -19,7 +19,7 @@ permalink: /account-returned/
 </p>
 
 <p id="fallback-hint" style="font-size: 17px; font-weight: 600; color: var(--brand-deep); display: none; margin-top: 20px; max-width: 480px; margin-left: auto; margin-right: auto; padding: 16px; border: 2px solid var(--brand-deep); border-radius: 12px;">
-  Touche la croix × en haut de cette fenêtre pour revenir dans Raw Adventure. Les changements sont déjà appliqués.
+  Fais glisser cette fenêtre vers le bas pour revenir dans Raw Adventure. Les changements sont déjà appliqués.
 </p>
 
 <p id="desktop-hint" style="font-size: 14px; color: var(--text-muted); display: none; margin-top: 16px; max-width: 480px; margin-left: auto; margin-right: auto;">
@@ -30,9 +30,9 @@ permalink: /account-returned/
 
 <script>
   /*
-   * Même stratégie que checkout-success : détecte mobile vs desktop/PWA.
-   * Mobile → tente deep link. Desktop/PWA → message direct (pas de scheme
-   * dispo, on évite l'erreur "adresse invalide").
+   * V1 (PWA uniquement) : pas de deep link natif. Mobile → close() si
+   * la fenêtre vient de l'app, sinon consigne « glisser vers le bas ».
+   * Desktop → message direct.
    */
   (function() {
     var btn = document.getElementById('back-to-app-btn');
@@ -50,22 +50,11 @@ permalink: /account-returned/
       }
 
       // Fenêtre ouverte par l'app (window.open) : fermeture autorisée.
-      // Dans la visionneuse iOS in-app, close() est ignoré → consigne ×.
+      // Dans la visionneuse iOS in-app, close() est ignoré → consigne geste.
       window.close();
-
-      var timer = setTimeout(function() {
-        if (hintMobile) hintMobile.style.display = 'block';
-      }, 500);
-
-      var onHide = function() {
-        if (document.hidden) {
-          clearTimeout(timer);
-          document.removeEventListener('visibilitychange', onHide);
-        }
-      };
-      document.addEventListener('visibilitychange', onHide);
-
-      window.location.href = 'rawadventure://subscription-success';
+      if (hintMobile) hintMobile.style.display = 'block';
+      // NB app native (V2+) : réintroduire ici le deep link
+      // rawadventure:// avec timer de repli.
     });
   })();
 </script>
